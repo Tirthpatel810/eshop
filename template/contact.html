@@ -1,0 +1,57 @@
+{% extends 'base_app/base_app.html' %}
+{% load static %}
+
+{% block title %}Contect us{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/contact_styles.css' %}">  <!-- Link to your external CSS -->
+    <title>Contact Us</title>
+</head>
+<body>
+
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>Contact Us Here</h1>
+        </div>
+    </section>
+
+    <div class="form-container">
+        <form method="post" class="contact-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_name" class="form-label">Name</label>
+                <input type="text" name="name" placeholder="Enter Name" class="form-control" id="id_name" required>
+            </div>
+            <div class="form-group">
+                <label for="id_mobile" class="form-label">Mobile</label>
+                <input type="text" name="mobile" maxlength="10" placeholder="Enter Mobile" class="form-control" id="id_mobile" required pattern="[0-9]{10}" title="Please Input Valid Mobile No">
+            </div>
+            <div class="form-group">
+                <label for="id_email" class="form-label">Email</label>
+                <input type="email" name="email" placeholder="Enter Email" class="form-control" id="id_email" required>
+            </div>
+            <div class="form-group">
+                <label for="id_question" class="form-label">Questions</label>
+                <textarea name="question" class="form-control" id="id_question" placeholder="Enter Your Query or Question" required></textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn-submit">Contact Now</button>
+            </div>
+        </form>
+
+        {% if success %}
+            <div class="success-message">
+                Contact Sent..
+            </div>
+            <script>alert('Contact Detail Sent Successfully');</script>
+        {% endif %}
+    </div>
+
+</body>
+</html>
+{% endblock %}

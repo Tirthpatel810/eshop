@@ -1,0 +1,164 @@
+{% extends 'base_app/base_app.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .orders-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .orders-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .order-card {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .status {
+        padding: 5px 10px;
+        border-radius: 12px;
+        font-size: 0.85rem;
+    }
+
+    .status.shipped {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .status.cancelled {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .status.pending {
+        background-color: #ffc107;
+        color: white;
+    }
+
+    .order-items ul {
+        padding-left: 20px;
+        list-style-type: disc;
+    }
+
+    .order-items li {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+    }
+
+    .order-actions {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+    }
+
+    .track-btn, .cancel-btn {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .track-btn {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .track-btn:hover {
+        background-color: #0056b3;
+    }
+
+    .cancel-btn {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .cancel-btn:disabled {
+        background-color: #6c757d;
+        cursor: not-allowed;
+    }
+
+    .no-orders-msg {
+        text-align: center;
+        color: #999;
+        font-size: 1.2rem;
+    }
+</style>
+
+
+<div class="orders-container">
+    <h1 class="title">Your Orders</h1>
+    
+    {% if orders %}
+    <div class="orders-list">
+        {% for order in orders %}
+        <div class="order-card">
+            <div class="order-header">
+                <h4>Order #{{ order.id }}</h4>
+                <span class="status {{ order.payment_status|lower }}">{{ order.payment_status }}</span>
+            </div>
+
+            <p><strong>Order Date:</strong> {{ order.created_at|date:"M d, Y H:i A" }}</p>
+            <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+            <p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+
+            <!-- List the items in the order -->
+            <div class="order-items">
+                <h5>Items Ordered</h5>
+                <ul>
+                    {% for item in order.orderitem_set.all %}
+                    <li>
+                        <span>{{ item.product.name }} (x{{ item.quantity }})</span>
+                        <span>₹{{ item.product.price }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <!-- Order Actions -->
+            <div class="order-actions">
+                <a href="{% url 'track_order' order.id %}" class="track-btn">Track Order</a>
+
+                {% if order.payment_status != 'Shipped' and order.payment_status != 'Cancelled' %}
+                <form action="{% url 'cancel_order' order.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="cancel-btn" type="submit">Cancel Order</button>
+                </form>
+                {% else %}
+                <button class="cancel-btn" disabled>Cancel Unavailable</button>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="no-orders-msg">You have no orders yet.</p>
+    {% endif %}
+</div>
+
+{% endblock %}

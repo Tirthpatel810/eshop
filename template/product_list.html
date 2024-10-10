@@ -1,0 +1,40 @@
+{% extends 'base_app/base_app.html' %}
+{% load static %}
+
+{% block title %}Product List{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/product_styles.css' %}">
+<div class="container">
+    <h1>Product</h1>
+
+    <div class="search-sort">
+        <form method="GET">
+            <input type="text" name="search" placeholder="Search products..." value="{{ search_query }}">
+            <select name="sort">
+                <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Sort by Name</option>
+                <option value="price" {% if sort_by == 'price' %}selected{% endif %}>Sort by Price</option>
+                <option value="created_at" {% if sort_by == 'created_at' %}selected{% endif %}>Sort by Date</option>
+            </select>
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="product-grid">
+        {% for product in products %}
+        <div class="product-card">
+            <img src="{{ product.image.url }}" alt="{{ product.name }}" class="product-image">
+            <h3>{{ product.name }}</h3>
+            <p class="product-price">Price: ₹{{ product.price }}</p>
+            <p class="product-category">Category: {{ product.category }}</p>
+            <!-- <p class="product-description">{{ product.description|truncatewords:15 }}</p> -->
+            <p class="product-quantity">Quantity: {{ product.quantity }}</p>
+            <a href="{% url 'product_detail' product.product_id %}" class="btn">View Details</a>
+            <a href="{% url 'add_to_cart' product.product_id %}" class="btn">Add to Cart</a>
+        </div>
+        {% empty %}
+        <p>No products found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

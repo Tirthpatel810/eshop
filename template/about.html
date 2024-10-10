@@ -1,0 +1,118 @@
+{% extends 'base_app/base_app.html' %}
+{% load static %}
+
+{% block title %}About{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Online Electronics Shop</title>
+    <!-- <link rel="stylesheet" href="{% static 'css/about_styles.css' %}"> -->
+    <style>
+        /* Basic styles for the page */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #141127;
+            color: #18b6e6;
+        }
+
+        .about-section {
+            background: url('{% static "images/about_bg.jpg" %}') no-repeat center center/cover;
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+
+        .about-section h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        .about-section p {
+            font-size: 1.2em;
+            width: 80%;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .team {
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .team h2 {
+            font-size: 2.5em;
+            margin-bottom: 40px;
+        }
+
+        .team-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .team-member {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 10px;
+            width: 250px;
+            text-align: center;
+        }
+
+        .team-member img {
+            border-radius: 50%;
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .team-member h3 {
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+
+        .team-member p {
+            font-size: 1em;
+            color: #777;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="about-section">
+        <h1>About Us</h1>
+        <p>Welcome to our Online Electronics Shop! We are dedicated to providing the best in consumer electronics, from gadgets to home appliances, and everything in between. Our mission is to ensure you get the best products at unbeatable prices, with world-class customer service.</p>
+    </div>
+
+    <div class="team">
+        <h2>Meet Our Team</h2>
+        <div class="team-container">
+            <div class="team-member">
+                <img src="{% static 'images/team_member1.jpg' %}" alt="Team Member 1">
+                <h3>Tirth Patel</h3>
+                <p>Founder & CEO</p>
+            </div>
+            <div class="team-member">
+                <img src="{% static 'images/team_member2.jpg' %}" alt="Team Member 2">
+                <h3>Raj Pipaliya</h3>
+                <p>Chief Technology Officer</p>
+            </div>
+            <div class="team-member">
+                <img src="{% static 'images/team_member3.jpg' %}" alt="Team Member 3">
+                <h3>Vanshil Sheth</h3>
+                <p>Marketing Director</p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'base_app/base_app.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container payment-container">
+    <h1 class="payment-heading">Online Payment</h1>
+    
+    <!-- Product Details Section -->
+    <div class="order-summary">
+        <h3 class="order-summary-heading">Order Summary</h3>
+        <table class="order-summary-table">
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr>
+                    <td>{{ item.product.name }}</td>
+                    <td>₹{{ item.product.price }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>₹{{ item.total_price }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Total Price -->
+    <div class="total-price-container">
+        <p class="total-price">Total Amount: ₹{{ total_price }}</p>
+    </div>
+
+    <!-- Razorpay Payment Button -->
+    <form action="{% url 'payment_success' %}" method="POST">
+        <script
+            src="https://checkout.razorpay.com/v1/checkout.js"
+            data-key="{{ razorpay_merchant_key }}"
+            data-amount="{{ total_price|floatformat:2|floatformat:0 }}00"
+            data-currency="INR"
+            data-order_id="{{ razorpay_order_id }}"
+            data-buttontext="Pay Now"
+            data-name="Your Shop Name"
+            data-description="Order Payment"
+            data-theme.color="#F37254">
+        </script>
+        {% csrf_token %}
+    </form>
+</div>
+
+<style>
+    .payment-container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .payment-heading {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #343a40;
+    }
+    .order-summary {
+        margin-bottom: 20px;
+    }
+    .order-summary-heading {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+        color: #495057;
+    }
+    .order-summary-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .order-summary-table th,
+    .order-summary-table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+    .order-summary-table th {
+        background-color: #f1f1f1;
+        font-weight: bold;
+    }
+    .total-price-container {
+        text-align: right;
+        margin-top: 20px;
+    }
+    .total-price {
+        font-size: 1.5rem;
+        color: #333;
+        font-weight: bold;
+    }
+    .razorpay-payment-button {
+        width: 100%;
+        padding: 15px;
+        font-size: 1.2rem;
+        background-color: #f37254;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
